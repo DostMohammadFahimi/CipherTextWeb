@@ -1,0 +1,39 @@
+body{
+    text-align: center;
+    background:rgb(127, 184, 219);
+}
+input{
+    margin: 5px;
+}
+button{
+    margin: 5px;
+}
+
+.Around{
+    color:black ;
+}
+
+#center{
+    color: yellow;
+}
+
+div{
+margin-bottom: 5rem;
+}
+
+#go-on-others{
+    margin-bottom: 3rem;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+    width: 200px;
+    height: 30px;
+    margin-bottom: 5rem;
+}
+
+a:hover{
+    background-color: lightslategray;
+    color: aqua;
+}

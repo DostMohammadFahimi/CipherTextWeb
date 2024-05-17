@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<title>Affine Cipher</title>
+<script>
+    // Function to perform Affine cipher encryption
+    function affineCipherEncrypt(text, a, b) {
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        let result = "";
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            if (char.match(/[a-z]/i)) { // Check if the character is a letter
+                let isUpperCase = char === char.toUpperCase();
+                char = char.toLowerCase(); // Convert to lowercase for simplicity
+                let x = alphabet.indexOf(char); // Get the index of the character in the alphabet
+
+                // Apply the Affine cipher encryption
+                let encryptedIndex = (a * x + b) % 26;
+                let encryptedChar = alphabet[encryptedIndex];
+
+                // Convert back to uppercase if the original character was uppercase
+                if (isUpperCase) {
+                    encryptedChar = encryptedChar.toUpperCase();
+                }
+                result += encryptedChar;
+            } else {
+                result += char; // Non-alphabetic characters remain unchanged
+            }
+        }
+        return result;
+    }
+
+    // Function to find the modular multiplicative inverse of a key modulo 26
+    function modInverse(a, m) {
+        for (let x = 1; x < m; x++) {
+            if ((a * x) % m === 1) {
+                return x;
+            }
+        }
+        throw new Error("Multiplicative inverse does not exist");
+    }
+
+    // Function to perform Affine cipher decryption
+    function affineCipherDecrypt(text, a, b) {
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        let result = "";
+        const aInverse = modInverse(a, 26); // Find the modular multiplicative inverse of 'a'
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            if (char.match(/[a-z]/i)) { // Check if the character is a letter
+                let isUpperCase = char === char.toUpperCase();
+                char = char.toLowerCase(); // Convert to lowercase for simplicity
+                let y = alphabet.indexOf(char); // Get the index of the character in the alphabet
+
+                // Apply the Affine cipher decryption
+                let decryptedIndex = (aInverse * (y - b + 26)) % 26;
+                let decryptedChar = alphabet[decryptedIndex];
+
+                // Convert back to uppercase if the original character was uppercase
+                if (isUpperCase) {
+                    decryptedChar = decryptedChar.toUpperCase();
+                }
+                result += decryptedChar;
+            } else {
+                result += char; // Non-alphabetic characters remain unchanged
+            }
+        }
+        return result;
+    }
+
+    // Function to handle encryption
+    function encryptText() {
+        const inputField = document.getElementById("inputText");
+        const inputText = inputField.value;
+        const keyAField = document.getElementById("keyA");
+        const keyBField = document.getElementById("keyB");
+        const keyA = parseInt(keyAField.value); // Parse key A input as an integer
+        const keyB = parseInt(keyBField.value); // Parse key B input as an integer
+        const outputField = document.getElementById("output");
+        const encryptedText = affineCipherEncrypt(inputText, keyA, keyB); // Encrypt using the provided keys
+        outputField.textContent = "Encrypted Text: " + encryptedText;
+    }
+
+    // Function to handle decryption
+    function decryptText() {
+        const inputField = document.getElementById("inputText");
+        const inputText = inputField.value;
+        const keyAField = document.getElementById("keyA");
+        const keyBField = document.getElementById("keyB");
+        const keyA = parseInt(keyAField.value); // Parse key A input as an integer
+        const keyB = parseInt(keyBField.value); // Parse key B input as an integer
+        const outputField = document.getElementById("output");
+        const decryptedText = affineCipherDecrypt(inputText, keyA, keyB); // Decrypt using the provided keys
+        outputField.textContent = "Decrypted Text: " + decryptedText;
+    }
+
+    // Function to reset input and output fields
+    function resetInput() {
+        document.getElementById("inputText").value = "";
+        document.getElementById("keyA").value = ""; // Reset key A input field
+        document.getElementById("keyB").value = ""; // Reset key B input field
+        document.getElementById("output").textContent = "";
+    }
+</script>
+</head>
+<body>
+<h1>Affine Cipher</h1>
+<label for="inputText">Enter Text:</label>
+<input type="text" id="inputText">
+<br><br>
+<label for="keyA">Enter Key A:</label>
+<input type="number" id="keyA">
+<br><br>
+<label for="keyB">Enter Key B:</label>
+<input type="number" id="keyB">
+<br><br>
+<button onclick="encryptText()">Encrypt</button>
+<button onclick="decryptText()">Decrypt</button>
+<button onclick="resetInput()">Reset</button>
+<br><br>
+<p id="output"></p>
+<div>
+    <hr class="Around">
+    <hr id="center">
+    <hr class="Around">
+</div>
+<button id="go-on-others"><a href="Multiplicative Cipher.html">GO TO MULTIPLICATIVE CIPHER PAGE</a></button>
+<button id="go-on-others"><a href="AutoKey Cipher.html"> GO TO AUTOKEY CIPHER PAGE</a></button>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<title>Auto Key Cipher</title>
+<script>
+    // Function to perform Auto Key Cipher encryption
+    function autoKeyCipherEncrypt(text, key) {
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        key = key.toLowerCase();
+        let extendedKey = key + text.toLowerCase(); // Extend the key with the plaintext
+        let result = "";
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            if (char.match(/[a-z]/i)) { // Check if the character is a letter
+                let isUpperCase = char === char.toUpperCase();
+                char = char.toLowerCase(); // Convert to lowercase for simplicity
+                let charIndex = alphabet.indexOf(char); // Get the index of the character in the alphabet
+                let keyIndex = alphabet.indexOf(extendedKey[i]); // Get the index of the key character
+
+                // Apply the Auto Key Cipher encryption
+                let encryptedIndex = (charIndex + keyIndex) % 26;
+                let encryptedChar = alphabet[encryptedIndex];
+
+                // Convert back to uppercase if the original character was uppercase
+                if (isUpperCase) {
+                    encryptedChar = encryptedChar.toUpperCase();
+                }
+                result += encryptedChar;
+            } else {
+                result += char; // Non-alphabetic characters remain unchanged
+            }
+        }
+        return result;
+    }
+
+    // Function to perform Auto Key Cipher decryption
+    function autoKeyCipherDecrypt(text, key) {
+        const alphabet = "abcdefghijklmnopqrstuvwxyz";
+        key = key.toLowerCase();
+        let result = "";
+        let extendedKey = key;
+
+        for (let i = 0; i < text.length; i++) {
+            let char = text[i];
+            if (char.match(/[a-z]/i)) { // Check if the character is a letter
+                let isUpperCase = char === char.toUpperCase();
+                char = char.toLowerCase(); // Convert to lowercase for simplicity
+                let charIndex = alphabet.indexOf(char); // Get the index of the character in the alphabet
+                let keyIndex = alphabet.indexOf(extendedKey[i]); // Get the index of the key character
+
+                // Apply the Auto Key Cipher decryption
+                let decryptedIndex = (charIndex - keyIndex + 26) % 26;
+                let decryptedChar = alphabet[decryptedIndex];
+                extendedKey += decryptedChar; // Extend the key with the decrypted character
+
+                // Convert back to uppercase if the original character was uppercase
+                if (isUpperCase) {
+                    decryptedChar = decryptedChar.toUpperCase();
+                }
+                result += decryptedChar;
+            } else {
+                result += char; // Non-alphabetic characters remain unchanged
+            }
+        }
+        return result;
+    }
+
+    // Function to handle encryption
+    function encryptText() {
+        const inputField = document.getElementById("inputText");
+        const inputText = inputField.value;
+        const keyField = document.getElementById("keyInput");
+        const key = keyField.value; // Get key input as a string
+        const outputField = document.getElementById("output");
+        const encryptedText = autoKeyCipherEncrypt(inputText, key); // Encrypt using the provided key
+        outputField.textContent = "Encrypted Text: " + encryptedText;
+    }
+
+    // Function to handle decryption
+    function decryptText() {
+        const inputField = document.getElementById("inputText");
+        const inputText = inputField.value;
+        const keyField = document.getElementById("keyInput");
+        const key = keyField.value; // Get key input as a string
+        const outputField = document.getElementById("output");
+        const decryptedText = autoKeyCipherDecrypt(inputText, key); // Decrypt using the provided key
+        outputField.textContent = "Decrypted Text: " + decryptedText;
+    }
+
+    // Function to reset input and output fields
+    function resetInput() {
+        document.getElementById("inputText").value = "";
+        document.getElementById("keyInput").value = ""; // Reset key input field
+        document.getElementById("output").textContent = "";
+    }
+</script>
+</head>
+<body>
+<h1>Auto Key Cipher</h1>
+<label for="inputText">Enter Text:</label>
+<input type="text" id="inputText">
+<br><br>
+<label for="keyInput">Enter Key:</label>
+<input type="text" id="keyInput">
+<br><br>
+<button onclick="encryptText()">Encrypt</button>
+<button onclick="decryptText()">Decrypt</button>
+<button onclick="resetInput()">Reset</button>
+<br><br>
+<p id="output"></p>
+<div>
+    <hr class="Around">
+    <hr id="center">
+    <hr class="Around">
+</div>
+<button id="go-on-others"><a href="Affine Cipher.html">GO TO AFFINE CIPHER PAGE</a></button>
+</body>
+</html>
